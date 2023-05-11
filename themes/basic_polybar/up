@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+export SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+run() {
+  if ! pgrep -f "$1" ;
+  then
+    "$@"&
+  fi
+}
+
+#down the last running theme
+if [ -f "/tmp/leftwm-theme-down" ]; then
+    /tmp/leftwm-theme-down
+    rm /tmp/leftwm-theme-down
+fi
+ln -s $SCRIPTPATH/down /tmp/leftwm-theme-down
+
+
+#boot picom or compton if it exists
+if [ -x "$(command -v picom)" ]; then
+  picom &> /dev/null &
+fi
+
+if [ -x "$(command -v nitrogen)" ]; then
+  nitrogen --restore &
+fi
+
+#set the theme.ron config
+leftwm-command "LoadTheme $SCRIPTPATH/theme.ron"
+
+run flameshot
+run lux -S 100%
+run setxkbmap us,ru -option grp:caps_toggle
+run blueman-applet
+run pipewire 
+run pipewire-pulse
+
+#run sudo logid
+
+pkill polybar
+$HOME/.config/polybar/launch.sh --colorblocks &

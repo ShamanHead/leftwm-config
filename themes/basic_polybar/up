@@ -32,10 +32,8 @@ run flameshot
 run lux -S 100%
 run setxkbmap us,ru -option grp:caps_toggle
 run blueman-applet
-run pipewire 
-run pipewire-pulse
-
 #run sudo logid
 
 pkill polybar
-$HOME/.config/polybar/launch.sh --colorblocks &
+$HOME/.config/polybar/launch.sh --panels &
+
